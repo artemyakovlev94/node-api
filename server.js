@@ -70,6 +70,19 @@ const start = async () => {
   await server.start();
 
   console.log('server running at: ' + server.info.uri);
+
+  // Параметры скрипта
+  for (let index = 0; index < process.argv.length; index++) {
+
+    if (process.argv[index] == 'migrate') {
+
+      const users_migrate = require('./database/migrations/users.migrations');
+      
+      users_migrate.DropTable();
+      users_migrate.CreateTable();
+    }
+  }
+
 };
 
 process.on('unhandledRejection', (err) => {
@@ -81,94 +94,14 @@ process.on('unhandledRejection', (err) => {
 start();
 
 
-// 'use strict';
 
-// const Hapi = require('@hapi/hapi');
-// const MySQL = require('mysql');
-
-// const init = async () => {
-
-//   const connection = MySQL.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'root',
-//     database: 'node_api'
-//   });
-
-//   const server = Hapi.server({
-//     port: 3000,
-//     host: 'localhost'
-//   });
-
-//   connection.connect();
-
-//   server.route({
-//     method: 'GET',
-//     path: '/',
-//     handler: (request, h) => {
-//       return 'Hello World!';
-//     }
-//   });
-
-//   server.route({
-//     method: 'GET',
-//     path: '/query',
-//     handler: (request, h) => {
-//       return request.query;
-//     }
-//   });
-
-//   server.route({
-//     method: 'GET',
-//     path: '/qwerty',
-//     handler: (request, h) => {
-//       return { test: "test" };
-//     }
-//   });
-
-//   server.route({
-//     method: 'GET',
-//     path: '/users',
-//     handler: async (request, h) => {
-
-//       const result = await connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-//         if (error) return { err: error };
-//         // console.log('The solution is: ', results[0].solution);
-//         return { res: results[0].solution };
-//       });
-
-//       return result;
-
-//       // try {
-//       //   const result = connection.query('SELECT * FROM messages');
-//       //   return { res: result };
-//       // } catch (error) {
-//       //   return { err: error };
-//       // }
-      
-
-//       // const result = await connection.query('SELECT * FROM messages');
-      
-      
-//     }
-//   });
-
-//   server.route({
-//     method: '*',
-//     path: '/{any*}',
-//     handler: function (request, h) {
-//       return '404 Error! Page Not Found!';
-//     }
-//   });
-
-//   await server.start();
-//   console.log('Server running on %s', server.info.uri);
-// };
-
-// process.on('unhandledRejection', (err) => {
-
-//   console.log(err);
-//   process.exit(1);
-// });
-
-// init();
+// let nodePath = process.argv[0];
+// let appPath = process.argv[1];
+// let name = process.argv[2];
+// let age = process.argv[3];
+ 
+// console.log("nodePath: " + nodePath);
+// console.log("appPath: " + appPath);
+// console.log();
+// console.log("name: " + name);
+// console.log("age: " + age);
