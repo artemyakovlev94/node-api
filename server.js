@@ -1,24 +1,22 @@
 
 'use strict';
 
-const Bcrypt = require('bcrypt');
-const Hapi = require('@hapi/hapi');
-const MySQL = require('mysql');
+require('dotenv').config()
 
-const validate = require('./controllers/auth.controller');
+const Hapi      = require('@hapi/hapi');
+const validate  = require('./controllers/auth.controller');
+const apiRouter = require('./routes/api.router');
 
 const start = async () => {
 
   const server = Hapi.server({ 
-    port: 3000,
-    host: 'localhost'
+    port: process.env.SERVER_PORT,
+    host: process.env.SERVER_HOST
   });
 
   await server.register(require('@hapi/basic'));
 
   server.auth.strategy('simple', 'basic', { validate });
-
-  const apiRouter = require('./routes/api.router');
 
   server.route(apiRouter);
 
