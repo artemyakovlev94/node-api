@@ -5,13 +5,16 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "nodemon server.js migrate"
+    "serve": "nodemon server.js",
+    "serve_migrate": "nodemon server.js --migrate",
+    "serve_migrate_fresh": "nodemon server.js --migrate_fresh"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@hapi/basic": "^6.0.0",
     "@hapi/hapi": "^20.2.2",
+    "@hapi/joi": "^17.1.1",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.1",
     "log4js": "^6.6.0",

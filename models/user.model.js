@@ -9,47 +9,40 @@ const User = function(user) {
   this.last_name = user.last_name;
 };
 
-module.exports.all = () => {
+module.exports.all = async () => {
 
-  return new Promise((resolve, reject) => {
-    dbconn.query('SELECT id, login, first_name, last_name, deleted FROM users', [], function (err, results) {
-      if (err) return reject(new Error(err));
-      return resolve(results);
-    })
-  }).catch((error) => {
+  try {
+    return await new Promise((resolve, reject) => {
+      dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users', [], function (err, results) {
+        if (err)
+          return reject(new Error(err));
+        return resolve(results);
+      });
+    });
+  } catch (error) {
     console.error("MySQL", error.stack);
     return null;
-  });
+  }
 }
 
-module.exports.find = (user_id) => {
-  return new Promise((resolve, reject) => {
-    dbconn.query('SELECT id, login, first_name, last_name, deleted FROM users WHERE id = ? LIMIT 1', [user_id], function (err, results) {
-      if (err) return reject(new Error(err));
-      return resolve(results);
-    })
-  }).then((results) => {
-    if (results.length !== 1)
-      return new Object;
-    return results[0];
-  }).catch((error) => {
-    console.error("MySQL", error.stack);
-    return null;
-  });
-}
+module.exports.findById = async (id) => {
 
-module.exports.findById = (id) => {
-  return new Promise((resolve, reject) => {
-    dbconn.query('SELECT id, login, first_name, last_name, deleted FROM users WHERE id = ? LIMIT 1', [id], function (err, results) {
-      if (err) return reject(new Error(err));
-      return resolve(results);
-    })
-  }).then((results) => {
-    if (results.length !== 1)
-      return new Object;
-    return results[0];
-  }).catch((error) => {
+  try {
+    return await new Promise((resolve, reject) => {
+      dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users WHERE id = ? LIMIT 1', [id], function (err, results) {
+        if (err) return reject(new Error(err));
+        return resolve(results);
+      })
+    }).then((results) => {
+      if (results.length !== 1)
+        return new Object;
+      return results[0];
+    }).catch((error) => {
+      console.error("MySQL", error.stack);
+      return null;
+    });
+  } catch (error) {
     console.error("MySQL", error.stack);
     return null;
-  });
+  }
 }

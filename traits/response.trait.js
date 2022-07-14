@@ -29,3 +29,18 @@ module.exports.NotFound = (h, message = 'Not Found') => {
     message: message
   }).code(500);
 }
+
+module.exports.ValidateError = (request, h, err) => {
+
+  if (process.env.NODE_ENV === 'dev') {
+    console.error(err.message, err.details);
+    throw err;
+  }
+  else {
+    return h.response({
+      statusCode: 400,
+      error: 'Bad Request',
+      message: err.message
+    }).code(400).takeover();
+  }
+}
