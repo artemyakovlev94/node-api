@@ -1,5 +1,7 @@
 'use strict'
 
+// http://vincit.github.io/objection.js/guide/query-examples.html#insert-queries
+
 var db = require('mysql');
 
 var dbconn = db.createConnection({
@@ -27,6 +29,19 @@ class DataBase {
 
   all() {
     console.log(this.#table_name);
+
+    var users = new Array;
+
+    for (let index = 0; index < 3; index++) {
+      
+      let user = new Object(this);
+
+      user.login = index;
+
+      users.push(user);
+    }
+
+    console.log(users)
   }
 
 }
