@@ -26,4 +26,12 @@ module.exports = [
     },
     handler: User.findById
   },
+  {
+    method: 'POST',
+    path: '/users',
+    options: {
+      auth: 'simple'
+    },
+    handler: User.create
+  },
 ];

@@ -15,7 +15,7 @@ module.exports.all = async (request, h) => {
 
 module.exports.findById = async (request, h) => {
   
-  const results = await User.findById(request.params.user_id);
+  const results = await new User().find(request.params.user_id);
 
   if (results == null)
     return ResponseTrait.InternalServerError(h);
@@ -25,6 +25,10 @@ module.exports.findById = async (request, h) => {
 
 module.exports.create = async (request, h) => {
 
-  
-  
+  let users = await new User().all();
+
+  if (users == null)
+    return ResponseTrait.InternalServerError(h);
+
+  return ResponseTrait.Success(h, users);
 }
