@@ -1,6 +1,8 @@
 'use strict';
 
-const dbconn = require('../models/db.model');
+// const dbconn = require('../models/db.model');
+
+//const DB = require('../traits/database.trait');
 
 // const User = function(user) {
 //   this.login = user.login;
@@ -25,32 +27,34 @@ const dbconn = require('../models/db.model');
 //   }
 // }
 
-async function getUsers() {
+// async function getUsers() {
 
-  try {
-    return await new Promise((resolve, reject) => {
-      dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users', [], function (err, results) {
-        if (err)
-          return reject(new Error(err));
+//   try {
+//     return await new Promise((resolve, reject) => {
+//       dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users', [], function (err, results) {
+//         if (err)
+//           return reject(new Error(err));
 
-        results = Object.values(JSON.parse(JSON.stringify(results)));
+//         results = Object.values(JSON.parse(JSON.stringify(results)));
 
-        var users = new Array;
+//         var users = new Array;
 
-        results.forEach(element => {
-          users.push(new User(element));
-        });
+//         results.forEach(element => {
+//           users.push(new User(element));
+//         });
 
-        return resolve(users);
-      });
-    });
-  } catch (error) {
-    console.error("MySQL", error.stack);
-    return null;
-  }
-}
+//         return resolve(users);
+//       });
+//     });
+//   } catch (error) {
+//     console.error("MySQL", error.stack);
+//     return null;
+//   }
+// }
 
-class User {
+const DataBase = require('./database.model')
+
+class User extends DataBase {
 
   id;
   login;
@@ -59,98 +63,127 @@ class User {
   last_name;
   #deleted;
 
-  constructor(options = undefined) {
-    if (typeof options == 'object') {
+  constructor(data = undefined) {
 
-      if (typeof options.id != 'undefined') {
-        this.id = options.id || null;
+    super();
+
+    if (typeof data == 'object') {
+
+      if (typeof data.id != 'undefined') {
+        this.id = data.id || null;
       }
 
-      if (typeof options.login != 'undefined') {
-        this.login = options.login || null;
+      if (typeof data.login != 'undefined') {
+        this.login = data.login || null;
       }
 
-      if (typeof options.password != 'undefined') {
-        this.password = options.password || null;
+      if (typeof data.password != 'undefined') {
+        this.password = data.password || null;
       }
 
-      if (typeof options.first_name != 'undefined') {
-        this.first_name = options.first_name || null;
+      if (typeof data.first_name != 'undefined') {
+        this.first_name = data.first_name || null;
       }
 
-      if (typeof options.last_name != 'undefined') {
-        this.last_name = options.last_name || null;
+      if (typeof data.last_name != 'undefined') {
+        this.last_name = data.last_name || null;
       }
 
-      if (typeof options.deleted != 'undefined') {
-        this.deleted = (typeof options.deleted == 'number') ? Boolean(options.deleted) : false;
+      if (typeof data.deleted != 'undefined') {
+        this.deleted = (typeof data.deleted == 'number') ? Boolean(data.deleted) : false;
       }
 
-      if (typeof options.created_at != 'undefined') {
-        this.created_at = options.created_at || null;
+      if (typeof data.created_at != 'undefined') {
+        this.created_at = data.created_at || null;
       }
 
-      if (typeof options.updated_at != 'undefined') {
-        this.updated_at = options.updated_at || null;
+      if (typeof data.updated_at != 'undefined') {
+        this.updated_at = data.updated_at || null;
       }
     }
   }
 
-  all = async () => {
-    try {
-      return await new Promise((resolve, reject) => {
-        dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users', [], function (err, results) {
-          if (err)
-            return reject(new Error(err));
-          return resolve(results);
-        });
-      })
-      .then((results) => {
-        results = Object.values(JSON.parse(JSON.stringify(results)));
-        var users = new Array;
-        results.forEach(element => {
-          users.push(new User(element));
-        });
-        return users;
-      })
-      .catch((error) => {
-        console.error("MySQL", error.stack);
-        return null;
-      });
-    } catch (error) {
-      console.error("MySQL", error.stack);
-      return null;
-    }
-  }
+  // all = async () => {
 
-  find = async (id) => {
-    try {
-      return await new Promise((resolve, reject) => {
-        dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users WHERE id = ? LIMIT 1', [id], function (err, results) {
-          if (err) return reject(new Error(err));
-          return resolve(results);
-        })
-      }).then((results) => {
-        results = Object.values(JSON.parse(JSON.stringify(results)));
-        var users = new Array;
-        results.forEach(element => {
-          users.push(new User(element));
-        });
-        return users[0];
+    
+  //   // let users = new Array;
+
+  //   // let results = await DB.all('users', 'id, login, first_name, last_name, deleted, created_at, updated_at');
+
+  //   // if (results == null) {
+  //   //   return null;
+  //   // }
+
+  //   // results.forEach(element => {
+  //   //   users.push(new User(element));
+  //   // });
+
+  //   // return users;
+  // }
+
+  /**
+   * Получить всех пользователей
+   * 
+   * @returns Array | null
+   */
+  // all = async () => {
+  //   try {
+  //     return await new Promise((resolve, reject) => {
+  //       dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users', [], function (err, results) {
+  //         if (err)
+  //           return reject(new Error(err));
+  //         return resolve(results);
+  //       });
+  //     })
+  //     .then((results) => {
+  //       var users = new Array;
+
+  //       results = Object.values(JSON.parse(JSON.stringify(results)));
+        
+  //       results.forEach(element => {
+  //         users.push(new User(element));
+  //       });
+
+  //       return users;
+  //     })
+  //     .catch((error) => {
+  //       console.error("MySQL", error.stack);
+  //       return null;
+  //     });
+  //   } catch (error) {
+  //     console.error("MySQL", error.stack);
+  //     return null;
+  //   }
+  // }
+
+  // find = async () => {
+  //   try {
+  //     return await new Promise((resolve, reject) => {
+  //       dbconn.query('SELECT id, login, first_name, last_name, deleted, created_at, updated_at FROM users WHERE id = ? LIMIT 1', [this.id], function (err, results) {
+  //         if (err) return reject(new Error(err));
+  //         return resolve(results);
+  //       })
+  //     }).then((results) => {
+  //       results = Object.values(JSON.parse(JSON.stringify(results)));
+  //       var users = new Array;
+  //       results.forEach(element => {
+  //         users.push(new User(element));
+  //       });
+  //       return users[0];
 
 
-        // if (results.length !== 1)
-        //   return new Object;
-        // return results[0];
-      }).catch((error) => {
-        console.error("MySQL", error.stack);
-        return null;
-      });
-    } catch (error) {
-      console.error("MySQL", error.stack);
-      return null;
-    }
-  }
+  //       // if (results.length !== 1)
+  //       //   return new Object;
+  //       // return results[0];
+  //     }).catch((error) => {
+  //       console.error("MySQL", error.stack);
+  //       return null;
+  //     });
+  //   } catch (error) {
+  //     console.error("MySQL", error.stack);
+  //     return null;
+  //   }
+  // }
 }
 
 module.exports = User;

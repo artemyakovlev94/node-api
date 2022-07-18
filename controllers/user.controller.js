@@ -5,7 +5,7 @@ const User = require('../models/user.model');
 
 module.exports.all = async (request, h) => {
 
-  const results = await User.all();
+  const results = await new User().all();
 
   if (results == null)
     return ResponseTrait.InternalServerError(h);
@@ -15,7 +15,7 @@ module.exports.all = async (request, h) => {
 
 module.exports.findById = async (request, h) => {
   
-  const results = await new User().find(request.params.user_id);
+  const results = await new User({id: request.params.user_id}).find();
 
   if (results == null)
     return ResponseTrait.InternalServerError(h);
